@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akun</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0d2b5e;
+            --primary-dark: #0a2148;
+            --secondary: #ff9800;
+            --accent: #ffcc00;
+            --success: #4caf50;
+            --info: #2196f3;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --dark: #343a40;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            padding-bottom: 70px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), #e65100);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .profile-role {
+            font-size: 15px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .profile-id {
+            background: var(--light);
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: var(--light);
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(13, 43, 94, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--primary);
+            margin-right: 16px;
+        }
+
+        .menu-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .menu-arrow {
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* Logout Section */
+        .logout-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .logout-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .logout-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 75, 43, 0.3);
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--gray);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+        }
+
+        .nav-item.active {
+            color: var(--secondary);
+            background: rgba(255, 152, 0, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 14px 16px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .profile-section {
+                padding: 20px;
+            }
+
+            .avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+
+            .profile-name {
+                font-size: 18px;
+            }
+
+            .menu-item {
+                padding: 16px 18px;
+            }
+
+            .menu-text {
+                font-size: 15px;
+            }
+
+            .logout-button {
+                padding: 14px;
+                font-size: 15px;
+            }
+
+            .bottom-nav {
+                padding: 10px 0;
+            }
+
+            .nav-icon {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 14px;
+            }
+
+            .profile-section {
+                padding: 18px;
+            }
+
+            .avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+
+            .profile-name {
+                font-size: 17px;
+            }
+
+            .profile-role {
+                font-size: 14px;
+            }
+
+            .menu-item {
+                padding: 14px 16px;
+            }
+
+            .menu-text {
+                font-size: 14px;
+            }
+
+            .logout-button {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="back-button">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="header-title">Akun</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="avatar">A</div>
+            <div class="profile-name">Ahmad Ramadhan</div>
+            <div class="profile-role">Siswa - Kelas 10 IPA 1</div>
+            <div class="profile-id">NIS: 1020304050</div>
+        </div>
+
+        <!-- Menu Section (Hanya 3 item) -->
+        <div class="menu-section">
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-user-edit"></i>
+                </div>
+                <div class="menu-text">Edit Profil</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="menu-text">Ganti Kata Sandi</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="menu-text">Bantuan & Dukungan</div>
+                <div class="menu-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout Section -->
+        <div class="logout-section">
+            <button class="logout-button">
+                <i class="fas fa-sign-out-alt"></i>
+                Keluar dari Akun
+            </button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <div class="nav-icon"><i class="fas fa-home"></i></div>
+            <div>Beranda</div>
+        </a>
+        <a href="presensi.html" class="nav-item">
+            <div class="nav-icon"><i class="fas fa-clipboard-list"></i></div>
+            <div>Presensi</div>
+        </a>
+        <a href="pengumuman.html" class="nav-item">
+            <div class="nav-icon"><i class="fas fa-bullhorn"></i></div>
+            <div>Pengumuman</div>
+        </a>
+        <a href="akun.html" class="nav-item active">
+            <div class="nav-icon"><i class="fas fa-user-circle"></i></div>
+            <div>Akun</div>
+        </a>
+    </div>
+
+    <script>
+        // 🔒 Cek apakah user sudah login
+        (function () {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (!isLoggedIn || !user) {
+                alert('Anda harus login terlebih dahulu!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Tampilkan data user di profil
+            document.querySelector('.profile-name').textContent = user.nama || 'Nama Pengguna';
+            document.querySelector('.avatar').textContent = (user.nama || 'U').charAt(0).toUpperCase();
+        })();
+    </script>
+
+    <script>
+        // Back button: kembali ke halaman sebelumnya (atau dashboard)
+        document.querySelector('.back-button').addEventListener('click', function () {
+            window.history.back(); // Lebih baik daripada alert
+        });
+
+        // Menu item: sementara hanya alert (bisa dikembangkan nanti)
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const text = this.querySelector('.menu-text').textContent;
+                alert(`Fitur "${text}" belum tersedia.`);
+            });
+        });
+
+        // 🔥 Logout button: Hapus sesi & redirect ke login
+        document.querySelector('.logout-button').addEventListener('click', function () {
+            if (confirm('Apakah Anda yakin ingin keluar dari akun ini?')) {
+                // Hapus data login
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user');
+
+                // Arahkan ke halaman login
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Bottom nav: tidak perlu ubah active state secara manual karena halaman berpindah
+        // Tapi jika tetap ingin efek visual saat klik (tanpa reload), bisa dipertahankan
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = item.getAttribute('href');
+                if (href) {
+                    // Update active state
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    // Redirect setelah efek
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 100);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

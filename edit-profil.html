@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Profil</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #0d2b5e;
+      --primary-dark: #0a2148;
+      --secondary: #ff9800;
+      --accent: #ffcc00;
+      --success: #4caf50;
+      --info: #2196f3;
+      --light: #f8f9fa;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --dark: #343a40;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      padding-bottom: 20px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-button {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-save {
+      background: linear-gradient(to right, var(--secondary), #e65100);
+      color: white;
+      border: none;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+    }
+
+    .btn-cancel {
+      background: var(--light);
+      color: var(--dark);
+      border: 1px solid var(--light-gray);
+    }
+
+    .btn-cancel:hover {
+      background: #e9ecef;
+    }
+
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 14px 16px;
+      }
+
+      .form-card {
+        padding: 20px;
+      }
+
+      .btn {
+        padding: 12px;
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 14px;
+      }
+
+      .form-card {
+        padding: 18px;
+      }
+
+      .form-title {
+        font-size: 18px;
+      }
+
+      .form-control {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      .form-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="back-button" id="backButton">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="header-title">Edit Profil</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="form-card">
+      <h2 class="form-title">Edit Informasi Profil</h2>
+      <form id="editForm">
+        <div class="form-group">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-control" id="nama" placeholder="Masukkan Nama Lengkap" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nama Sekolah</label>
+          <input type="text" class="form-control" id="sekolah" placeholder="Masukkan Nama Sekolah" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Masukkan Email" required>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-cancel" id="cancelBtn">Batal</button>
+          <button type="submit" class="btn btn-save" id="saveBtn">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 🔒 Cek login
+    (function () {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (!isLoggedIn || !user) {
+        alert('Anda harus login terlebih dahulu!');
+        window.location.href = 'index.html';
+        return;
+      }
+    })();
+
+    // Back button
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      if (confirm('Batalkan perubahan?')) {
+        window.history.back();
+      }
+    });
+
+    // Load data user saat halaman dimuat
+    async function loadUserData() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.id) return;
+
+      try {
+        const response = await fetch(`http://localhost/login-app/api.php?action=profil_user&user_id=${user.id}`);
+        const result = await response.json();
+
+        if (result.success) {
+          document.getElementById('nama').value = result.data.nama;
+          document.getElementById('sekolah').value = result.data.sekolah;
+          document.getElementById('email').value = result.data.email;
+        } else {
+          alert('Gagal memuat data profil: ' + result.message);
+        }
+      } catch (error) {
+        alert('Terjadi kesalahan: ' + error.message);
+      }
+    }
+
+    // Simpan perubahan
+    document.getElementById('editForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.id) {
+        alert('Sesi login tidak valid.');
+        return;
+      }
+
+      const nama = document.getElementById('nama').value.trim();
+      const sekolah = document.getElementById('sekolah').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      if (!nama || !sekolah || !email) {
+        alert('Semua field wajib diisi.');
+        return;
+      }
+
+      // Validasi email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Format email tidak valid.');
+        return;
+      }
+
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Menyimpan...';
+
+      try {
+        const response = await fetch('http://localhost/login-app/api.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'update_profil',
+            user_id: user.id,
+            nama,
+            sekolah,
+            email
+          })
+        });
+
+        const result = await response.json();
+        alert(result.message);
+
+        if (result.success) {
+          // Update localStorage
+          const updatedUser = { ...user, nama, email };
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+
+          // Kembali ke halaman akun
+          window.location.href = 'akun.html';
+        }
+      } catch (error) {
+        alert('Gagal menyimpan: ' + error.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Simpan Perubahan';
+      }
+    });
+
+    // Inisialisasi
+    loadUserData();
+  </script>
+</body>
+
+</html>

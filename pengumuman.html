@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengumuman</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #0d2b5e;
+      --primary-dark: #0a2148;
+      --secondary: #ff9800;
+      --accent: #ffcc00;
+      --success: #4caf50;
+      --info: #2196f3;
+      --light: #f8f9fa;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --dark: #343a40;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      padding-bottom: 70px;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-button {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 16px;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .header-icon:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Announcement Card */
+    .announcement-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .announcement-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .announcement-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--light-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .announcement-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .announcement-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .announcement-date {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .announcement-author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .announcement-body {
+      padding: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--dark);
+    }
+
+    .announcement-body p {
+      margin-bottom: 12px;
+    }
+
+    .announcement-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .announcement-tag {
+      display: inline-block;
+      background: rgba(33, 150, 243, 0.1);
+      color: var(--info);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .read-more-btn {
+      display: inline-block;
+      background: transparent;
+      color: var(--info);
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      margin-top: 8px;
+    }
+
+    .full-text {
+      display: none;
+    }
+
+    .truncated-text {
+      display: block;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      color: var(--primary);
+      margin-bottom: 20px;
+      opacity: 0.7;
+    }
+
+    .empty-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .empty-text {
+      font-size: 15px;
+      color: var(--gray);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      display: flex;
+      justify-content: space-around;
+      padding: 14px 0;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--gray);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item:hover {
+      background: var(--light);
+    }
+
+    .nav-item.active {
+      color: var(--secondary);
+      background: rgba(255, 152, 0, 0.1);
+    }
+
+    .nav-icon {
+      font-size: 22px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 14px 16px;
+      }
+
+      .header-title {
+        font-size: 16px;
+      }
+
+      .announcement-header {
+        padding: 16px;
+      }
+
+      .announcement-title {
+        font-size: 16px;
+      }
+
+      .announcement-body {
+        padding: 16px;
+        font-size: 14px;
+      }
+
+      .empty-icon {
+        font-size: 54px;
+      }
+
+      .empty-title {
+        font-size: 18px;
+      }
+
+      .bottom-nav {
+        padding: 10px 0;
+      }
+
+      .nav-icon {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 14px;
+      }
+
+      .announcement-meta {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .empty-icon {
+        font-size: 48px;
+      }
+
+      .empty-title {
+        font-size: 17px;
+      }
+
+      .empty-text {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="back-button">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="header-title">Pengumuman</div>
+    <div class="header-actions">
+      <div class="header-icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="header-icon">
+        <i class="fas fa-filter"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Announcement 1 -->
+    <div class="announcement-card">
+      <div class="announcement-header">
+        <div>
+          <div class="announcement-title">Libur Nasional Hari Kemerdekaan</div>
+          <div class="announcement-meta">
+            <div class="announcement-date">
+              <i class="far fa-calendar"></i> 17 Agustus 2025
+            </div>
+            <div class="announcement-author">
+              <i class="fas fa-user"></i> Admin Sekolah
+            </div>
+          </div>
+        </div>
+        <div class="announcement-tag">Penting</div>
+      </div>
+      <div class="announcement-body">
+        <p class="truncated-text">Diberitahukan kepada seluruh siswa dan orang tua/wali bahwa pada tanggal 17 Agustus
+          2025 akan diliburkan dalam rangka memperingati Hari Kemerdekaan Republik Indonesia. Tidak ada kegiatan belajar
+          mengajar...</p>
+        <p class="full-text">Diberitahukan kepada seluruh siswa dan orang tua/wali bahwa pada tanggal 17 Agustus 2025
+          akan diliburkan dalam rangka memperingati Hari Kemerdekaan Republik Indonesia. Tidak ada kegiatan belajar
+          mengajar pada hari tersebut. Aktivitas belajar akan kembali normal pada hari berikutnya.</p>
+        <button class="read-more-btn" onclick="toggleText(this)">Lihat Selengkapnya</button>
+      </div>
+    </div>
+
+    <!-- Announcement 2 -->
+    <div class="announcement-card">
+      <div class="announcement-header">
+        <div>
+          <div class="announcement-title">Deadline Pengumpulan Tugas Akhir Semester</div>
+          <div class="announcement-meta">
+            <div class="announcement-date">
+              <i class="far fa-calendar"></i> 10 Agustus 2025
+            </div>
+            <div class="announcement-author">
+              <i class="fas fa-user"></i> Guru BK
+            </div>
+          </div>
+        </div>
+        <div class="announcement-tag">Tenggat Waktu</div>
+      </div>
+      <div class="announcement-body">
+        <p class="truncated-text">Perhatian untuk seluruh siswa kelas X dan XI: batas akhir pengumpulan tugas akhir
+          semester adalah Minggu, 10 Agustus 2025 pukul 23.59 WIB. Tugas yang dikumpulkan melewati tenggat waktu tidak
+          akan dinilai...</p>
+        <p class="full-text">Perhatian untuk seluruh siswa kelas X dan XI: batas akhir pengumpulan tugas akhir semester
+          adalah <strong>Minggu, 10 Agustus 2025 pukul 23.59 WIB</strong>. Tugas yang dikumpulkan melewati tenggat waktu
+          tidak akan dinilai. Pastikan semua dokumen telah diunggah melalui portal akademik.</p>
+        <button class="read-more-btn" onclick="toggleText(this)">Lihat Selengkapnya</button>
+      </div>
+    </div>
+
+    <!-- Announcement 3 -->
+    <div class="announcement-card">
+      <div class="announcement-header">
+        <div>
+          <div class="announcement-title">Jadwal Ujian Tengah Semester (UTS)</div>
+          <div class="announcement-meta">
+            <div class="announcement-date">
+              <i class="far fa-calendar"></i> 15–20 Agustus 2025
+            </div>
+            <div class="announcement-author">
+              <i class="fas fa-user"></i> Wakil Kepala Sekolah
+            </div>
+          </div>
+        </div>
+        <div class="announcement-tag">Akademik</div>
+      </div>
+      <div class="announcement-body">
+        <p class="truncated-text">Ujian Tengah Semester akan dilaksanakan mulai tanggal 15 hingga 20 Agustus 2025.
+          Jadwal lengkap dapat diunduh melalui portal siswa. Siswa diwajibkan hadir 15 menit sebelum ujian dimulai
+          dengan membawa alat tulis dan kartu ujian...</p>
+        <p class="full-text">Ujian Tengah Semester akan dilaksanakan mulai tanggal 15 hingga 20 Agustus 2025. Jadwal
+          lengkap dapat diunduh melalui portal siswa. Siswa diwajibkan hadir 15 menit sebelum ujian dimulai dengan
+          membawa alat tulis dan kartu ujian.</p>
+        <button class="read-more-btn" onclick="toggleText(this)">Lihat Selengkapnya</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <a href="dashboard.html" class="nav-item">
+      <div class="nav-icon"><i class="fas fa-home"></i></div>
+      <div>Beranda</div>
+    </a>
+    <a href="presensi.html" class="nav-item">
+      <div class="nav-icon"><i class="fas fa-clipboard-list"></i></div>
+      <div>Presensi</div>
+    </a>
+    <a href="pengumuman.html" class="nav-item active">
+      <div class="nav-icon"><i class="fas fa-bullhorn"></i></div>
+      <div>Pengumuman</div>
+    </a>
+    <a href="akun.html" class="nav-item">
+      <div class="nav-icon"><i class="fas fa-user-circle"></i></div>
+      <div>Akun</div>
+    </a>
+  </div>
+
+  <script>
+    // Back button functionality
+    document.querySelector('.back-button').addEventListener('click', function () {
+      alert('Kembali ke halaman sebelumnya');
+      // window.history.back();
+    });
+
+    // Header icon functionality
+    document.querySelectorAll('.header-icon').forEach(icon => {
+      icon.addEventListener('click', function () {
+        const action = this.querySelector('i').className.includes('fa-search') ? 'Pencarian' : 'Filter';
+        alert(`Fitur ${action} diklik!`);
+      });
+    });
+
+    // Bottom nav functionality
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Toggle full text
+    function toggleText(button) {
+      const card = button.closest('.announcement-card');
+      const truncatedText = card.querySelector('.truncated-text');
+      const fullText = card.querySelector('.full-text');
+      const readMoreBtn = card.querySelector('.read-more-btn');
+
+      if (fullText.style.display === 'none' || !fullText.style.display) {
+        truncatedText.style.display = 'none';
+        fullText.style.display = 'block';
+        readMoreBtn.textContent = 'Sembunyikan';
+      } else {
+        truncatedText.style.display = 'block';
+        fullText.style.display = 'none';
+        readMoreBtn.textContent = 'Lihat Selengkapnya';
+      }
+    }
+  </script>
+</body>
+
+</html>

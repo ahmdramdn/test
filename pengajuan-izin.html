@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengajuan Izin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ... [SEMUA CSS TETAP SAMA SEPERTI SEBELUMNYA] ... */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #0d2b5e;
+      --primary-dark: #0a2148;
+      --secondary: #ff9800;
+      --accent: #ffcc00;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --light: #f8f9fa;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --dark: #343a40;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    .header {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-button {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .tabs {
+      display: flex;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      border-radius: 0 0 var(--radius) var(--radius);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--gray);
+    }
+
+    .tab.active {
+      color: var(--secondary);
+      background: rgba(255, 152, 0, 0.1);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-card,
+    .history-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    .form-card.active,
+    .history-card.active {
+      display: block;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+    }
+
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .file-upload {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 2px dashed var(--light-gray);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .file-upload:hover {
+      border-color: var(--secondary);
+      background: rgba(255, 152, 0, 0.03);
+    }
+
+    .file-icon {
+      font-size: 24px;
+      color: var(--secondary);
+    }
+
+    .file-text {
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, var(--secondary), #e65100);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+    }
+
+    /* History Section */
+    .history-list {
+      list-style: none;
+    }
+
+    .history-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--light-gray);
+      position: relative;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* Tambahkan ini */
+      margin-bottom: 8px;
+    }
+
+    .history-date {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .history-status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .status-menunggu {
+      background: rgba(255, 152, 0, 0.15);
+      color: var(--warning);
+    }
+
+    .status-disetujui {
+      background: rgba(76, 175, 80, 0.15);
+      color: var(--success);
+    }
+
+    .status-ditolak {
+      background: rgba(244, 67, 54, 0.15);
+      color: var(--danger);
+    }
+
+    .history-reason {
+      font-size: 14px;
+      color: var(--gray);
+      margin: 4px 0;
+    }
+
+    .history-desc {
+      font-size: 14px;
+      color: var(--dark);
+      line-height: 1.5;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .btn-detail,
+    .btn-hide {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-detail {
+      background: var(--light);
+      color: var(--primary);
+    }
+
+    .btn-detail:hover {
+      background: #e3e9f2;
+    }
+
+    .btn-hide {
+      background: #ffebee;
+      color: var(--danger);
+    }
+
+    .btn-hide:hover {
+      background: #ffcdd2;
+    }
+
+    .empty-history {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+
+    .empty-history i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      color: var(--light-gray);
+    }
+
+    /* Modal Detail */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      padding: 20px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .detail-row {
+      margin-bottom: 16px;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: var(--gray);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .detail-value {
+      font-size: 16px;
+      color: var(--dark);
+    }
+
+    .file-link {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 14px 16px;
+      }
+
+      .form-card,
+      .history-card {
+        padding: 20px;
+      }
+
+      .btn-submit {
+        padding: 12px;
+        font-size: 15px;
+      }
+
+      .tab {
+        padding: 14px;
+        font-size: 14px;
+      }
+
+      .history-actions {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .btn-detail,
+      .btn-hide {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 14px;
+      }
+
+      .form-card,
+      .history-card {
+        padding: 18px;
+      }
+
+      .form-title {
+        font-size: 18px;
+      }
+
+      .form-control {
+        padding: 12px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="back-button" id="backButton">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="header-title">Pengajuan Izin</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="form">Ajukan Izin</div>
+    <div class="tab" data-tab="history">Riwayat</div>
+  </div>
+
+  <div class="container">
+    <!-- Form Pengajuan -->
+    <div class="form-card active" id="formSection">
+      <h2 class="form-title">Ajukan Izin Tidak Masuk Sekolah</h2>
+      <form id="izinForm">
+        <div class="form-group">
+          <label class="form-label">Tanggal Izin</label>
+          <input type="date" class="form-control" id="tanggal" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Alasan Izin</label>
+          <select class="form-control" id="alasan" required>
+            <option value="">Pilih alasan...</option>
+            <option value="sakit">Sakit</option>
+            <option value="acara_keluarga">Acara Keluarga</option>
+            <option value="keperluan_pribadi">Keperluan Pribadi</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Keterangan Tambahan</label>
+          <textarea class="form-control" id="keterangan"
+            placeholder="Jelaskan secara singkat alasan Anda..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Lampiran (Opsional)</label>
+          <div class="file-upload" id="fileUploadArea">
+            <div class="file-icon">
+              <i class="fas fa-paperclip"></i>
+            </div>
+            <div class="file-text" id="fileText">Klik untuk unggah surat dokter atau dokumen pendukung (PDF, JPG, PNG)
+            </div>
+            <input type="file" class="file-input" id="lampiran" accept=".pdf,.jpg,.jpeg,.png">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Ajukan Izin</button>
+      </form>
+    </div>
+
+    <!-- Riwayat Pengajuan -->
+    <div class="history-card" id="historySection">
+      <h2 class="form-title">Riwayat Pengajuan Izin</h2>
+      <div id="historyContent">
+        <!-- Data akan dimuat di sini -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Detail -->
+  <div class="modal" id="detailModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Detail Pengajuan Izin</div>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body" id="detailBody">
+        <!-- Detail akan dimuat di sini -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 🔒 Cek login
+    (function () {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (!isLoggedIn) {
+        alert('Anda harus login terlebih dahulu!');
+        window.location.href = 'index.html';
+        return;
+      }
+    })();
+
+    // Back button
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        const target = tab.getAttribute('data-tab');
+        document.getElementById('formSection').classList.toggle('active', target === 'form');
+        document.getElementById('historySection').classList.toggle('active', target === 'history');
+
+        if (target === 'history') {
+          loadHistory();
+        }
+      });
+    });
+
+    // Modal
+    const modal = document.getElementById('detailModal');
+    document.querySelector('.close-modal').addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) modal.style.display = 'none';
+    });
+
+    // File upload preview
+    const fileInput = document.getElementById('lampiran');
+    const fileText = document.getElementById('fileText');
+
+    fileInput.addEventListener('change', function () {
+      if (this.files.length > 0) {
+        const fileName = this.files[0].name;
+        fileText.textContent = fileName;
+      } else {
+        fileText.textContent = 'Klik untuk unggah surat dokter atau dokumen pendukung (PDF, JPG, PNG)';
+      }
+    });
+
+    // Load history
+    async function loadHistory() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.id) {
+        document.getElementById('historyContent').innerHTML = '<div class="empty-history"><i class="fas fa-inbox"></i><p>Anda belum login.</p></div>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost/login-app/api.php?action=riwayat_izin&user_id=${user.id}`);
+        const result = await response.json();
+
+        const historyContent = document.getElementById('historyContent');
+        if (result.success && result.data.length > 0) {
+          let html = '<ul class="history-list">';
+          result.data.forEach(item => {
+            const statusClass = `status-${item.status}`;
+            html += `
+              <li class="history-item" data-id="${item.id}">
+                <div class="history-header">
+                  <div class="history-date">${new Date(item.tanggal).toLocaleDateString('id-ID')}</div>
+                  <span class="history-status ${statusClass}">${item.status_label}</span>
+                </div>
+                <div class="history-reason">${item.alasan_label}</div>
+                <div class="history-desc">${item.keterangan || '-'}</div>
+                <div class="history-actions">
+                  <button class="btn-detail" onclick="showDetail(${item.id})">Lihat Detail</button>
+                  <button class="btn-hide" onclick="hideIzin(${item.id})">Sembunyikan</button>
+                </div>
+              </li>
+            `;
+          });
+          html += '</ul>';
+          historyContent.innerHTML = html;
+        } else {
+          historyContent.innerHTML = '<div class="empty-history"><i class="fas fa-file-alt"></i><p>Belum ada riwayat pengajuan izin.</p></div>';
+        }
+      } catch (error) {
+        document.getElementById('historyContent').innerHTML = '<div class="empty-history"><i class="fas fa-exclamation-triangle"></i><p>Gagal memuat riwayat.</p></div>';
+      }
+    }
+
+    // Show detail
+    async function showDetail(izinId) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      try {
+        const response = await fetch(`http://localhost/login-app/api.php?action=detail_izin&izin_id=${izinId}&user_id=${user.id}`);
+        const result = await response.json();
+
+        if (result.success) {
+          const data = result.data;
+          let html = `
+            <div class="detail-row">
+              <div class="detail-label">Tanggal Izin</div>
+              <div class="detail-value">${new Date(data.tanggal).toLocaleDateString('id-ID')}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Status</div>
+              <div class="detail-value">
+                <span class="history-status status-${data.status}">${data.status_label}</span>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Alasan</div>
+              <div class="detail-value">${data.alasan_label}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Keterangan</div>
+              <div class="detail-value">${data.keterangan || '-'}</div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-label">Diajukan Pada</div>
+              <div class="detail-value">${new Date(data.created_at).toLocaleString('id-ID')}</div>
+            </div>
+          `;
+
+          if (data.file_path) {
+            html += `
+              <div class="detail-row">
+                <div class="detail-label">Lampiran</div>
+                <div class="detail-value">
+                  <a href="http://localhost/login-app/${data.file_path}" target="_blank" class="file-link">Lihat Dokumen</a>
+                </div>
+              </div>
+            `;
+          }
+
+          document.getElementById('detailBody').innerHTML = html;
+          document.getElementById('detailModal').style.display = 'flex';
+        } else {
+          alert('Gagal memuat detail: ' + result.message);
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+
+    // Hide izin (soft delete)
+    async function hideIzin(izinId) {
+      if (!confirm('Apakah Anda yakin ingin menyembunyikan pengajuan ini dari riwayat?')) return;
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      const formData = new FormData();
+      formData.append('action', 'sembunyikan_izin');
+      formData.append('izin_id', izinId);
+      formData.append('user_id', user.id);
+
+      try {
+        const response = await fetch('http://localhost/login-app/api.php', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        alert(result.message);
+        if (result.success) {
+          loadHistory(); // Refresh riwayat
+        }
+      } catch (error) {
+        alert('Gagal: ' + error.message);
+      }
+    }
+
+    // Form submission
+    document.getElementById('izinForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.id) {
+        alert('Sesi login tidak valid. Silakan login ulang.');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('action', 'ajukan_izin');
+      formData.append('user_id', user.id);
+      formData.append('tanggal', document.getElementById('tanggal').value);
+      formData.append('alasan', document.getElementById('alasan').value);
+      formData.append('keterangan', document.getElementById('keterangan').value.trim());
+
+      const fileInput = document.getElementById('lampiran');
+      if (fileInput.files.length > 0) {
+        formData.append('lampiran', fileInput.files[0]);
+      }
+
+      try {
+        const response = await fetch('http://localhost/login-app/api.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        alert(result.message);
+
+        if (result.success) {
+          this.reset();
+          document.getElementById('fileText').textContent = 'Klik untuk unggah surat dokter atau dokumen pendukung (PDF, JPG, PNG)';
+          if (document.querySelector('.tab[data-tab="history"]').classList.contains('active')) {
+            loadHistory();
+          }
+        }
+      } catch (error) {
+        alert('Gagal: ' + error.message);
+      }
+    });
+  </script>
+</body>
+
+</html>

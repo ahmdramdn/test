@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nilai Siswa</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #1a3a6c;
+      --primary-dark: #0f254a;
+      --secondary: #2196f3;
+      --accent: #64b5f6;
+      --success: #4caf50;
+      --warning: #ff9800;
+      --danger: #f44336;
+      --light: #f8fafc;
+      --white: #ffffff;
+      --gray: #64748b;
+      --light-gray: #e2e8f0;
+      --dark: #1e293b;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 6px 24px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f4f8 0%, #e6f0f8 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      padding-bottom: 30px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-button {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-icon {
+      background: var(--secondary);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 28px 0 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+      color: var(--gray);
+      margin-bottom: 28px;
+      font-size: 16px;
+    }
+
+    /* Summary Cards */
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .summary-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .summary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--secondary);
+    }
+
+    .summary-card.avg::before {
+      background: var(--success);
+    }
+
+    .summary-card.rank::before {
+      background: var(--warning);
+    }
+
+    .summary-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .summary-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(33, 150, 243, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 18px;
+    }
+
+    .summary-label {
+      font-size: 15px;
+      color: var(--gray);
+      font-weight: 600;
+    }
+
+    .summary-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .summary-rank {
+      color: var(--warning);
+    }
+
+    /* Filter Section */
+    .filter-section {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .filter-title {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 18px;
+    }
+
+    .filter-select {
+      padding: 12px 16px;
+      border: 1px solid var(--light-gray);
+      border-radius: 12px;
+      font-size: 16px;
+      background: white;
+      cursor: pointer;
+      min-width: 180px;
+      transition: var(--transition);
+    }
+
+    .filter-select:hover {
+      border-color: var(--secondary);
+    }
+
+    /* Modern Grades Grid */
+    .grades-container {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .grades-header {
+      padding: 20px 24px;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grades-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Responsive Grid - 2 kolom di mobile */
+    .grades-grid {
+      display: grid;
+      /* Default: 3-4 kolom di desktop */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--light-gray);
+    }
+
+    .grade-card {
+      background: var(--white);
+      padding: 24px;
+      transition: var(--transition);
+    }
+
+    .grade-card:hover {
+      background: rgba(33, 150, 243, 0.03);
+    }
+
+    /* Subject Name */
+    .subject-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--light-gray);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subject-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(33, 150, 243, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 20px;
+    }
+
+    /* Grade Items */
+    .grade-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--light-gray);
+    }
+
+    .grade-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .grade-label {
+      font-size: 15px;
+      color: var(--gray);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grade-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* Average Item - Highlighted */
+    .average-item {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 2px solid var(--light-gray);
+    }
+
+    .average-item .grade-label {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .average-item .grade-value {
+      color: var(--success);
+      font-size: 20px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .empty-icon {
+      font-size: 72px;
+      color: var(--light-gray);
+      margin-bottom: 24px;
+    }
+
+    .empty-text {
+      font-size: 20px;
+      color: var(--gray);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .empty-subtext {
+      color: var(--gray);
+      font-size: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--gray);
+      font-size: 18px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(33, 150, 243, 0.2);
+      border-top: 4px solid var(--secondary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+      }
+
+      .container {
+        padding: 0 20px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+
+      .summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      /* 2 kolom di tablet dan mobile */
+      .grades-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .filter-select {
+        min-width: 140px;
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-title {
+        font-size: 18px;
+      }
+
+      .summary-value {
+        font-size: 28px;
+      }
+
+      /* Tetap 2 kolom di mobile */
+      .grades-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .grade-card {
+        padding: 18px;
+      }
+
+      .subject-name {
+        font-size: 15px;
+      }
+
+      .grade-value {
+        font-size: 15px;
+      }
+
+      .average-item .grade-value {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="back-button" id="backButton">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="header-title">
+      <div class="header-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      Nilai Siswa
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">Rapor Akademik</h1>
+    <p class="page-subtitle">Pantau perkembangan akademik Anda setiap semester</p>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="summary-card avg">
+        <div class="summary-header">
+          <div class="summary-icon">
+            <i class="fas fa-calculator"></i>
+          </div>
+          <div class="summary-label">Rata-rata Nilai</div>
+        </div>
+        <div class="summary-value" id="avgGrade">85.6</div>
+      </div>
+      <div class="summary-card rank">
+        <div class="summary-header">
+          <div class="summary-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="summary-label">Peringkat Kelas</div>
+        </div>
+        <div class="summary-value summary-rank" id="classRank">3 dari 32</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-header">
+          <div class="summary-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="summary-label">Jumlah Mapel</div>
+        </div>
+        <div class="summary-value" id="subjectCount">8</div>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+      <div class="filter-header">
+        <div class="filter-title">Filter Semester</div>
+        <select class="filter-select" id="semesterFilter">
+          <option value="ganjil">Semester Ganjil</option>
+          <option value="genap" selected>Semester Genap</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Grades Grid -->
+    <div class="grades-container">
+      <div class="grades-header">
+        <div class="grades-title">Detail Nilai</div>
+      </div>
+      <div id="grades-grid-container">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          Memuat data nilai...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Back button
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Simulasi data
+    const mockGrades = {
+      ganjil: [
+        { mapel: "Matematika", tugas: 85, uts: 80, uas: 90, rata: 85 },
+        { mapel: "Fisika", tugas: 90, uts: 85, uas: 88, rata: 88 },
+        { mapel: "Kimia", tugas: 78, uts: 82, uas: 85, rata: 82 },
+        { mapel: "Biologi", tugas: 88, uts: 90, uas: 92, rata: 90 },
+        { mapel: "Bahasa Indonesia", tugas: 92, uts: 88, uas: 90, rata: 90 },
+        { mapel: "Bahasa Inggris", tugas: 85, uts: 80, uas: 85, rata: 83 },
+        { mapel: "Sejarah", tugas: 80, uts: 75, uas: 80, rata: 78 },
+        { mapel: "PJOK", tugas: 95, uts: 90, uas: 95, rata: 93 }
+      ],
+      genap: [
+        { mapel: "Matematika", tugas: 88, uts: 85, uas: 92, rata: 88 },
+        { mapel: "Fisika", tugas: 92, uts: 88, uas: 90, rata: 90 },
+        { mapel: "Kimia", tugas: 80, uts: 85, uas: 88, rata: 84 },
+        { mapel: "Biologi", tugas: 90, uts: 92, uas: 95, rata: 92 },
+        { mapel: "Bahasa Indonesia", tugas: 90, uts: 85, uas: 88, rata: 88 },
+        { mapel: "Bahasa Inggris", tugas: 88, uts: 85, uas: 90, rata: 88 },
+        { mapel: "Sejarah", tugas: 85, uts: 80, uas: 85, rata: 83 },
+        { mapel: "PJOK", tugas: 98, uts: 95, uas: 100, rata: 98 }
+      ]
+    };
+
+    // Ikon mata pelajaran
+    function getSubjectIcon(mapel) {
+      const icons = {
+        'matematika': 'fas fa-square-root-alt',
+        'fisika': 'fas fa-atom',
+        'kimia': 'fas fa-flask',
+        'biologi': 'fas fa-dna',
+        'bahasa indonesia': 'fas fa-book',
+        'bahasa inggris': 'fas fa-language',
+        'sejarah': 'fas fa-landmark',
+        'pjok': 'fas fa-running',
+        'default': 'fas fa-graduation-cap'
+      };
+      const key = mapel.toLowerCase();
+      return icons[key] || icons.default;
+    }
+
+    // Render detail nilai lengkap
+    function renderGrades(grades) {
+      if (!grades || grades.length === 0) {
+        document.getElementById('grades-grid-container').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="empty-text">Belum ada data nilai</div>
+            <p class="empty-subtext">Nilai akan ditampilkan setelah guru memasukkan data penilaian untuk semester ini.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Update summary
+      const total = grades.reduce((acc, grade) => acc + grade.rata, 0);
+      const avg = (total / grades.length).toFixed(1);
+      document.getElementById('avgGrade').textContent = avg;
+      document.getElementById('classRank').textContent = '3 dari 32';
+      document.getElementById('subjectCount').textContent = grades.length;
+
+      let html = '<div class="grades-grid">';
+
+      grades.forEach(grade => {
+        const iconClass = getSubjectIcon(grade.mapel);
+
+        html += `
+          <div class="grade-card">
+            <div class="subject-name">
+              <div class="subject-icon">
+                <i class="${iconClass}"></i>
+              </div>
+              ${grade.mapel}
+            </div>
+            
+            <div class="grade-item">
+              <div class="grade-label">
+                <i class="fas fa-tasks"></i> Nilai Tugas
+              </div>
+              <div class="grade-value">${grade.tugas}</div>
+            </div>
+            
+            <div class="grade-item">
+              <div class="grade-label">
+                <i class="fas fa-file-alt"></i> Nilai UTS
+              </div>
+              <div class="grade-value">${grade.uts}</div>
+            </div>
+            
+            <div class="grade-item">
+              <div class="grade-label">
+                <i class="fas fa-file-invoice"></i> Nilai UAS
+              </div>
+              <div class="grade-value">${grade.uas}</div>
+            </div>
+            
+            <div class="grade-item average-item">
+              <div class="grade-label">
+                <i class="fas fa-calculator"></i> Rata-rata
+              </div>
+              <div class="grade-value">${grade.rata}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      document.getElementById('grades-grid-container').innerHTML = html;
+    }
+
+    // Filter berdasarkan semester
+    document.getElementById('semesterFilter').addEventListener('change', function () {
+      const semester = this.value;
+      renderGrades(mockGrades[semester]);
+    });
+
+    // Load data awal
+    function loadData() {
+      setTimeout(() => {
+        const initialSemester = document.getElementById('semesterFilter').value;
+        renderGrades(mockGrades[initialSemester]);
+      }, 800);
+    }
+
+    // Inisialisasi
+    loadData();
+  </script>
+</body>
+
+</html>

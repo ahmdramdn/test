@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login & Register</title>
+    <style>
+        /* ... (CSS tetap sama seperti milik Anda, tidak perlu diubah) ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0d1b4a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-image {
+            width: 100%;
+            height: auto;
+            background-color: #0d1b4a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .header-image img {
+            width: 80%;
+            max-width: 300px;
+            height: auto;
+        }
+
+        .form-container {
+            padding: 30px 25px;
+        }
+
+        .form-title {
+            color: #ff9900;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #f8f8f8;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 100%;
+            color: #ff9900;
+            font-size: 18px;
+            background-color: transparent;
+            pointer-events: none;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 15px 15px 15px 0;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            background-color: transparent;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #ff9900;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff9900;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #e68a00;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: #666;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #ddd;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 15px;
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-google:hover {
+            background-color: #f5f5f5;
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer-text a {
+            color: #ff9900;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-form {
+            display: block;
+        }
+
+        .register-form {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                margin: 0 10px;
+            }
+
+            .form-container {
+                padding: 25px 20px;
+            }
+
+            .form-title {
+                font-size: 20px;
+            }
+
+            .form-input {
+                padding: 12px 12px 12px 0;
+                font-size: 14px;
+            }
+
+            .btn-primary {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .btn-google {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .form-switch a {
+            color: #ff9900;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-image">
+            <img src="https://placehold.co/300x200/0d1b4a/ffffff?text=Login+Illustration" alt="Login Illustration" />
+        </div>
+
+        <!-- Login Form -->
+        <div class="form-container login-form" id="loginForm">
+            <h2 class="form-title">Selamat Datang!</h2>
+            <p class="form-subtitle">Silahkan masuk untuk memulai aplikasi.</p>
+
+            <form id="login">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" class="form-input" id="login-email" placeholder="Masukkan Email" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" class="form-input" id="login-password" placeholder="Masukkan Password"
+                            required />
+                        <span class="password-toggle">👁️</span>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#">Lupa password?</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="loginBtn">Masuk</button>
+
+                <div class="divider"><span>Atau</span></div>
+
+                <button type="button" class="btn-google">
+                    <img src="https://placehold.co/20x20/ffffff/000000?text=G" alt="Google" class="google-icon" />
+                    Masuk Dengan Google
+                </button>
+
+                <div class="footer-text">
+                    Belum punya akun? <a href="#" id="switchToRegister">Daftar</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form-container register-form" id="registerForm">
+            <h2 class="form-title">Pendaftaran Akun</h2>
+
+            <form id="register">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" class="form-input" id="nama" placeholder="Masukkan Nama Lengkap" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nama Sekolah</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📍</span>
+                        <input type="text" class="form-input" id="sekolah" placeholder="Masukkan Nama Sekolah"
+                            required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">✉️</span>
+                        <input type="email" class="form-input" id="email" placeholder="Masukkan Email" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" class="form-input" id="password" placeholder="Minimal 6 karakter"
+                            required minlength="6" />
+                        <span class="password-toggle">👁️</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="registerBtn">Buat Akun</button>
+
+                <div class="footer-text">
+                    Sudah punya akun? <a href="#" id="switchToLogin">Masuk</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 🔴 GANTI DENGAN URL WEB APP ANDA DARI GOOGLE APPS SCRIPT!
+        // ✅ Ganti dengan URL lokal ke file PHP Anda
+        const WEB_APP_URL = 'http://localhost/login-app/api.php';
+
+        // Toggle password visibility for ALL toggle buttons
+        document.querySelectorAll('.password-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    this.textContent = '👁️';
+                }
+            });
+        });
+
+        // Switch forms
+        document.getElementById('switchToRegister').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        });
+
+        document.getElementById('switchToLogin').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+        });
+
+        // Helper: set button loading state
+        function setButtonLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            if (loading) {
+                btn.disabled = true;
+                btn.textContent = 'Memproses...';
+            } else {
+                btn.disabled = false;
+                btn.textContent = btnId === 'loginBtn' ? 'Masuk' : 'Buat Akun';
+            }
+        }
+
+        // Register form
+        document.getElementById('register').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            setButtonLoading('registerBtn', true);
+
+            const nama = document.getElementById('nama').value.trim();
+            const sekolah = document.getElementById('sekolah').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (password.length < 6) {
+                alert('Password minimal 6 karakter.');
+                setButtonLoading('registerBtn', false);
+                return;
+            }
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'register',
+                        nama,
+                        sekolah,
+                        email,
+                        password
+                    })
+                });
+
+                const result = await response.json();
+                alert(result.message);
+
+                if (result.success) {
+                    // Reset form & switch to login
+                    document.getElementById('register').reset();
+                    document.getElementById('registerForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan: ' + error.message);
+            } finally {
+                setButtonLoading('registerBtn', false);
+            }
+        });
+
+        // Login form
+        document.getElementById('login').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            setButtonLoading('loginBtn', true);
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'login',
+                        email,
+                        password
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('user', JSON.stringify({
+                        id: result.user.id,     // ✅ Ini wajib ada
+                        nama: result.user.nama,
+                        email: email
+                    }));
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                alert('Terjadi kesalahan: ' + error.message);
+            } finally {
+                setButtonLoading('loginBtn', false);
+            }
+        });
+    </script>
+</body>
+
+</html>

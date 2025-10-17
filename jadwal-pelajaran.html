@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jadwal Pelajaran</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #0d2b5e;
+      --primary-dark: #0a2148;
+      --secondary: #ff9800;
+      --accent: #ffcc00;
+      --monday: #e3f2fd;
+      --tuesday: #f3e5f5;
+      --wednesday: #e8f5e9;
+      --thursday: #fff3e0;
+      --friday: #ffebee;
+      --saturday: #e0f7fa;
+      --light: #f8f9fa;
+      --white: #ffffff;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --dark: #343a40;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      padding-bottom: 20px;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .back-button {
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .schedule-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Weekly Schedule */
+    .week-days {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .day-tab {
+      flex: 1;
+      min-width: 80px;
+      padding: 12px 8px;
+      text-align: center;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--light);
+      color: var(--gray);
+    }
+
+    .day-tab.active {
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .day-tab.mon { background: var(--monday); }
+    .day-tab.tue { background: var(--tuesday); }
+    .day-tab.wed { background: var(--wednesday); }
+    .day-tab.thu { background: var(--thursday); }
+    .day-tab.fri { background: var(--friday); }
+    .day-tab.sat { background: var(--saturday); }
+
+    .day-tab.active.mon { background: #2196f3; }
+    .day-tab.active.tue { background: #9c27b0; }
+    .day-tab.active.wed { background: #4caf50; }
+    .day-tab.active.thu { background: #ff9800; }
+    .day-tab.active.fri { background: #f44336; }
+    .day-tab.active.sat { background: #00bcd4; }
+
+    /* Lessons Grid */
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .lesson-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease;
+    }
+
+    .lesson-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .lesson-time {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lesson-subject {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .lesson-info {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    .lesson-teacher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--light-gray);
+    }
+
+    /* Empty State */
+    .empty-schedule {
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      color: var(--light-gray);
+      margin-bottom: 16px;
+    }
+
+    .empty-text {
+      font-size: 16px;
+      color: var(--gray);
+      font-weight: 600;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header {
+        padding: 14px 16px;
+      }
+
+      .day-tab {
+        min-width: 60px;
+        padding: 10px 4px;
+        font-size: 13px;
+      }
+
+      .lessons-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .lesson-card {
+        padding: 16px;
+      }
+
+      .lesson-subject {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 14px;
+      }
+
+      .day-tab {
+        min-width: 50px;
+        padding: 10px 2px;
+        font-size: 12px;
+      }
+
+      .lesson-time, .lesson-info, .lesson-teacher {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="back-button" id="backButton">
+      <i class="fas fa-arrow-left"></i>
+    </div>
+    <div class="header-title">Jadwal Pelajaran</div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2 class="schedule-title">Jadwal Minggu Ini</h2>
+
+    <!-- Day Tabs (Tanpa Minggu) -->
+    <div class="week-days">
+      <div class="day-tab mon" data-day="senin">Senin</div>
+      <div class="day-tab tue" data-day="selasa">Selasa</div>
+      <div class="day-tab wed" data-day="rabu">Rabu</div>
+      <div class="day-tab thu" data-day="kamis">Kamis</div>
+      <div class="day-tab fri" data-day="jumat">Jumat</div>
+      <div class="day-tab sat" data-day="sabtu">Sabtu</div>
+    </div>
+
+    <!-- Lessons Content (Akan diisi via JavaScript) -->
+    <div id="lessons-container">
+      <div class="loading">Memuat jadwal...</div>
+    </div>
+  </div>
+
+  <script>
+    // Back button
+    document.getElementById('backButton').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Format waktu HH:MM
+    function formatTime(timeStr) {
+      if (!timeStr) return '–';
+      const [hours, minutes] = timeStr.split(':');
+      return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+    }
+
+    // Render jadwal untuk hari tertentu
+    function renderJadwalForDay(hari, data) {
+      const container = document.getElementById('lessons-container');
+      
+      if (!data || data.length === 0) {
+        container.innerHTML = `
+          <div class="empty-schedule">
+            <div class="empty-icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="empty-text">Tidak ada jadwal pada hari ini</div>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="lessons-grid">';
+      data.forEach(lesson => {
+        html += `
+          <div class="lesson-card">
+            <div class="lesson-time">
+              <i class="far fa-clock"></i> ${formatTime(lesson.jam_mulai)} - ${formatTime(lesson.jam_selesai)}
+            </div>
+            <div class="lesson-subject">${lesson.mata_pelajaran}</div>
+            <div class="lesson-info">Kelas 10 IPA 1 • ${lesson.ruangan || 'Ruang Umum'}</div>
+            <div class="lesson-teacher">
+              <i class="fas fa-chalkboard-teacher"></i> ${lesson.guru || 'Guru Tidak Diketahui'}
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // Simpan data jadwal global
+    let jadwalData = null;
+
+    // Load jadwal dari API
+    async function loadJadwal() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.id) {
+        alert('Anda harus login terlebih dahulu!');
+        window.location.href = 'index.html';
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost/login-app/api.php?action=jadwal_pelajaran&user_id=${user.id}`);
+        const result = await response.json();
+
+        if (result.success) {
+          jadwalData = result.data;
+          // Tampilkan hari Senin secara default
+          showDay('senin');
+        } else {
+          document.getElementById('lessons-container').innerHTML = `
+            <div class="empty-schedule">
+              <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+              <div class="empty-text">Gagal memuat jadwal: ${result.message}</div>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('lessons-container').innerHTML = `
+          <div class="empty-schedule">
+            <div class="empty-icon"><i class="fas fa-wifi-slash"></i></div>
+            <div class="empty-text">Tidak dapat terhubung ke server</div>
+          </div>
+        `;
+      }
+    }
+
+    // Tampilkan jadwal untuk hari tertentu
+    function showDay(hari) {
+      // Update active tab
+      document.querySelectorAll('.day-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.getAttribute('data-day') === hari);
+      });
+
+      // Render jadwal
+      if (jadwalData) {
+        renderJadwalForDay(hari, jadwalData[hari] || []);
+      }
+    }
+
+    // Setup tab click events
+    document.querySelectorAll('.day-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const hari = tab.getAttribute('data-day');
+        showDay(hari);
+      });
+    });
+
+    // Auto-load jadwal saat halaman dibuka
+    loadJadwal();
+
+    // Optional: Highlight current day
+    (function() {
+      const dayMap = {
+        1: 'senin',
+        2: 'selasa',
+        3: 'rabu',
+        4: 'kamis',
+        5: 'jumat',
+        6: 'sabtu',
+        0: 'senin' // Minggu → default ke Senin
+      };
+      const today = new Date().getDay();
+      const currentDay = dayMap[today];
+      
+      // Tunggu sampai jadwal dimuat, lalu pilih hari ini
+      const interval = setInterval(() => {
+        if (jadwalData) {
+          showDay(currentDay);
+          clearInterval(interval);
+        }
+      }, 100);
+    })();
+  </script>
+</body>
+
+</html>

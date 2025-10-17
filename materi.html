@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Materi Pelajaran</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #0d2b5e;
+            --primary-dark: #0a2148;
+            --secondary: #2196f3;
+            --accent: #64b5f6;
+            --success: #4caf50;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --dark: #343a40;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-button {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 24px 0 16px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Materials Grid */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .material-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .material-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .material-icon {
+            height: 120px;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .material-body {
+            padding: 20px;
+        }
+
+        .material-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .material-meta {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .material-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .material-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-preview {
+            background: var(--light);
+            color: var(--primary);
+            border: 1px solid var(--light-gray);
+        }
+
+        .btn-preview:hover {
+            background: #e3e9f2;
+        }
+
+        .btn-download {
+            background: var(--secondary);
+            color: white;
+            border: none;
+        }
+
+        .btn-download:hover {
+            background: #1976d2;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 18px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 14px 16px;
+            }
+
+            .materials-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .material-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 14px;
+            }
+
+            .material-body {
+                padding: 16px;
+            }
+
+            .material-title {
+                font-size: 16px;
+            }
+
+            .material-meta {
+                flex-direction: column;
+                gap: 6px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="back-button" id="backButton">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="header-title">Materi Pelajaran</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Daftar Materi</h1>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <label class="filter-label">Filter Mata Pelajaran</label>
+            <select class="filter-select" id="subjectFilter">
+                <option value="">Semua Mata Pelajaran</option>
+                <option value="matematika">Matematika</option>
+                <option value="fisika">Fisika</option>
+                <option value="kimia">Kimia</option>
+                <option value="biologi">Biologi</option>
+                <option value="bahasa-indonesia">Bahasa Indonesia</option>
+                <option value="bahasa-inggris">Bahasa Inggris</option>
+                <option value="sejarah">Sejarah</option>
+            </select>
+        </div>
+
+        <!-- Materials List -->
+        <div id="materials-container">
+            <div class="loading">Memuat materi pelajaran...</div>
+        </div>
+    </div>
+
+    <script>
+  // Back button
+  document.getElementById('backButton').addEventListener('click', () => {
+    window.history.back();
+  });
+
+  // Ikon berdasarkan mata pelajaran
+  function getSubjectIcon(subject) {
+    const icons = {
+      'matematika': 'fas fa-square-root-alt',
+      'fisika': 'fas fa-atom',
+      'kimia': 'fas fa-flask',
+      'biologi': 'fas fa-dna',
+      'bahasa-indonesia': 'fas fa-book',
+      'bahasa-inggris': 'fas fa-language',
+      'sejarah': 'fas fa-landmark',
+      'default': 'fas fa-file-alt'
+    };
+    return icons[subject] || icons.default;
+  }
+
+  // Render materi
+  function renderMaterials(materials) {
+    if (!materials || materials.length === 0) {
+      document.getElementById('materials-container').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fas fa-book-open"></i></div>
+          <div class="empty-text">Belum ada materi tersedia</div>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '<div class="materials-grid">';
+    materials.forEach(material => {
+      const iconClass = getSubjectIcon(material.mata_pelajaran);
+      const baseUrl = 'http://localhost/login-app/'; // Sesuaikan dengan URL Anda
+      const fileUrl = baseUrl + material.file_path;
+      
+      html += `
+        <div class="material-card">
+          <div class="material-icon">
+            <i class="${iconClass}"></i>
+          </div>
+          <div class="material-body">
+            <h3 class="material-title">${material.judul}</h3>
+            <div class="material-meta">
+              <div class="material-info">
+                <i class="fas fa-chalkboard"></i>
+                ${material.kelas}
+              </div>
+              <div class="material-info">
+                <i class="fas fa-calendar-day"></i>
+                ${material.tanggal}
+              </div>
+            </div>
+            <div class="material-meta">
+              <div class="material-info">
+                <i class="fas fa-file-pdf"></i>
+                ${material.ukuran_file}
+              </div>
+              <div class="material-info">
+                <i class="fas fa-graduation-cap"></i>
+                ${material.mata_pelajaran.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </div>
+            </div>
+            <div class="material-actions">
+              <button class="action-btn btn-preview" onclick="previewMaterial('${fileUrl}')">
+                <i class="fas fa-eye"></i> Preview
+              </button>
+              <button class="action-btn btn-download" onclick="downloadMaterial('${fileUrl}', '${material.judul}')">
+                <i class="fas fa-download"></i> Unduh
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    document.getElementById('materials-container').innerHTML = html;
+  }
+
+  // Fungsi aksi
+  function previewMaterial(url) {
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      alert('Preview tidak tersedia.');
+    }
+  }
+
+  function downloadMaterial(url, title) {
+    if (url) {
+      window.location.href = url;
+    } else {
+      alert('File tidak tersedia untuk diunduh.');
+    }
+  }
+
+  // Load data dari API
+  async function loadData() {
+    const subject = document.getElementById('subjectFilter').value;
+    const url = `http://localhost/login-app/api.php?action=daftar_materi${subject ? '&subject=' + encodeURIComponent(subject) : ''}`;
+    
+    try {
+      const response = await fetch(url);
+      const result = await response.json();
+      
+      if (result.success) {
+        renderMaterials(result.data);
+      } else {
+        document.getElementById('materials-container').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="empty-text">Gagal memuat materi: ${result.message}</div>
+          </div>
+        `;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('materials-container').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon"><i class="fas fa-wifi-slash"></i></div>
+          <div class="empty-text">Tidak dapat terhubung ke server</div>
+        </div>
+      `;
+    }
+  }
+
+  // Setup filter
+  document.getElementById('subjectFilter').addEventListener('change', loadData);
+
+  // Inisialisasi
+  loadData();
+</script>
+</body>
+
+</html>
